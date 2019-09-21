@@ -3,5 +3,28 @@ https://moneyhoney-api.herokuapp.com/ | https://git.heroku.com/moneyhoney-api.gi
 0. Login
 	> heroku login
 
-1. Criar aplica��o
+1. Criar aplicação
 	> heroku create nomeapi
+
+2. Provisionar banco
+	*addons(features)
+	> heroku addons:create jawsdb --app moneyhoney-api
+
+3. Info do DB
+	> heroku config:get JAWSDB_URL --app moneyhoney-api
+
+4. Config Username e Password DB
+	> heroku config:set JDBC_DATABASE_URL=jdbc:mysql://url JDBC_DATABASE_USERNAME=username JDBC_DATABASE_PASSWORD=password --app moneyhoney-api
+	> heroku config:set JDBC_DATABASE_URL=jdbc:mysql://u0zbt18wwjva9e0v.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/fslzol5qcwuhjw9i JDBC_DATABASE_USERNAME=piertgsvup6dk4sj JDBC_DATABASE_PASSWORD=vdez5zvpup78zwft --app moneyhoney-api
+
+5. Set linguagem padrão da api
+	> heroku buildpacks:set heroku/java --app moneyhoney-api
+
+6. Set repositório remoto ao heroku
+	>  heroku git:remote -a moneyhoney-api
+
+7. Subir aplicação para o repositorio heroku
+	> git push heroku master
+
+8. Subi aplicação e exibir o log
+	> heroku logs --tail
