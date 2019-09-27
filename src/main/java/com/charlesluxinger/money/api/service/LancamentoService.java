@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,41 @@ public class LancamentoService {
 		}
 
 		throw new PessoaInexistenteOuInativaException();
+	}
+
+	public Lancamento update(Long id, @Valid Lancamento lancamento) {
+		Lancamento lancamentoFound = findValidLancamento(id);
+
+		if (!lancamento.getPessoa().equals(lancamentoFound.getPessoa())) {
+			validarPessoa(lancamento);
+		}
+
+		BeanUtils.copyProperties(lancamento, lancamentoFound, "id");
+
+		return lancamentoRepository.save(lancamentoFound);
+	}
+
+	private void validarPessoa(@Valid Lancamento lancamento) {
+		Pessoa pessoa = null;
+
+		if (lancamento.getPessoa().getId() != null) {
+			pessoa = pessoaRepository.findById(lancamento.getPessoa().getId()).orElse(null);
+		}
+
+		if (pessoa == null || !pessoa.getStatus()) {
+			throw new PessoaInexistenteOuInativaException();
+		}
+
+	}
+
+	private Lancamento findValidLancamento(Long id) {
+		Lancamento lancamentoFound = lancamentoRepository.findById(id).orElse(null);
+
+		if (lancamentoFound == null) {
+			throw new IllegalArgumentException();
+		}
+
+		return lancamentoFound;
 	}
 
 }
